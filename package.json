@@ -1,0 +1,31 @@
+{
+  "name": "node-reverse-proxy",
+  "version": "1.0.0",
+  "description": "Simple reverse proxy with Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hkurosu/node-reverse-proxy.git"
+  },
+  "keywords": [
+    "http",
+    "https",
+    "reverse",
+    "proxy"
+  ],
+  "author": "Hiro Kurosu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hkurosu/node-reverse-proxy/issues"
+  },
+  "homepage": "https://github.com/hkurosu/node-reverse-proxy#readme",
+  "dependencies": {
+    "fs": "0.0.2",
+    "http": "0.0.0",
+    "http-proxy": "^1.13.3",
+    "https": "^1.0.0"
+  }
+}
