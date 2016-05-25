@@ -4,14 +4,14 @@ var httpProxy = require('http-proxy'),
 
 // tls proxy port
 var tlsPort = 5053;
-// hostname white list
+// hostname white list - TODO: may lookup DNS to get available aliases
 var hostNames = ['localhost', 'lw5-hku1-bio.dsone.3ds.com'];
 
 function fixRedirectUrl(proxyRes) {
   if (proxyRes.headers['location']) {
     var loc = url.parse(proxyRes.headers['location']);
     if (loc.protocol == 'http:' && loc.port == tlsPort) {
-      if (hostNames.indexOf(loc.hostname) >= 0) {
+      if (hostNames.indexOf(loc.hostname.toLowerCase()) >= 0) {
         loc.protocol = 'https:';
         proxyRes.headers['location'] = loc.format();
         console.log('### http -> https: ' + loc.protocol + loc.host + loc.path + ' ...');
