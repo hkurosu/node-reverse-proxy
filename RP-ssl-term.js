@@ -7,7 +7,9 @@ var tlsPort = 5053;
 // hostname white list - TODO: may lookup DNS to get available aliases
 var hostNames = ['localhost', 'lw5-hku1-bio.dsone.3ds.com'];
 
-function fixRedirectUrl(proxyRes) {
+// make 'http' to 'https' of location header if it redirects back to
+// the same proxy server.
+function fixRedirectUrlScheme(proxyRes) {
   if (proxyRes.headers['location']) {
     var loc = url.parse(proxyRes.headers['location']);
     if (loc.protocol == 'http:' && loc.port == tlsPort) {
@@ -35,7 +37,7 @@ tlsProxy.on('proxyRes', function(proxyRes, req, res) {
   console.log('req: ' + req.url);
 
   // hack location header
-  fixRedirectUrl(proxyRes);
+  fixRedirectUrlScheme(proxyRes);
   
   if (!req.url.match(/\/(assets\/|notifications)/)) {
     console.log('  req headers: ' + JSON.stringify(req.headers, true, 2));
