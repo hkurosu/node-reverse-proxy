@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/hkurosu/node-reverse-proxy#readme",
   "dependencies": {
-    "http-proxy": "^1.13.3",
+    "http-proxy": "^1.13.3"
   }
 }
