@@ -22,6 +22,14 @@ function fixRedirectUrlScheme(proxyRes) {
   }
 }
 
+function logger(proxyRes, req, res) {
+  console.log('req: ' + req.url);
+  if (!req.url.match(/\/(assets\/|notifications)/)) {
+    console.log('  req headers: ' + JSON.stringify(req.headers, true, 2));
+    console.log('  res headers: ' + JSON.stringify(proxyRes.headers, true, 2));
+  }
+}
+
 // https proxy (https -> http)
 var tlsProxy = httpProxy.createProxyServer({
   target: 'http://localhost:8080',
@@ -33,31 +41,15 @@ var tlsProxy = httpProxy.createProxyServer({
   // secure: false,
   // xfwd: true,
 }).listen(tlsPort);
-tlsProxy.on('proxyRes', function(proxyRes, req, res) {
-  console.log('req: ' + req.url);
-
-  // hack location header
-  fixRedirectUrlScheme(proxyRes);
-  
-  if (!req.url.match(/\/(assets\/|notifications)/)) {
-    console.log('  req headers: ' + JSON.stringify(req.headers, true, 2));
-    console.log('  res headers: ' + JSON.stringify(proxyRes.headers, true, 2));
-  }
-});
+tlsProxy.on('proxyRes', fixRedirectUrlScheme);
+tlsProxy.on('proxyRes', logger);
 
 // http proxy
 var proxy = httpProxy.createProxyServer({
   target: 'http://localhost:8080',
   // xfwd: true
 }).listen(5050);
-
-proxy.on('proxyRes', function(proxyRes, req, res) {
-  console.log('req: ' + req.url);
-  if (!req.url.match(/\/assets\//)) {
-    console.log('  req headers: ' + JSON.stringify(req.headers, true, 2));
-    console.log('  res headers: ' + JSON.stringify(proxyRes.headers, true, 2));
-  }
-});
+proxy.on('proxyRes', logger);
 
 // global error handling
 process.on('uncaughtException', function (err) {
